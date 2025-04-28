@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Response</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        #response-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .question-item {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        .question-label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        .answer {
+            font-size: 1.1em;
+            color: #333;
+        }
+        .options-display {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        .option-item{
+             margin-bottom: 5px;
+        }
+        .option-label {
+            margin-left: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="response-container">
+        <h1>Response Details</h1>
+        {% if form and response %}
+            {% for question in form.questions %}
+                <div class="question-item">
+                    <label class="question-label">{{ question.label }}</label>
+                    <div class="answer">
+                        {% if question.type == 'text' or question.type == 'textarea' %}
+                            {{ response[question.id] }}
+                        {% elif question.type == 'radio' %}
+                            {{ response[question.id] }}
+                        {% elif question.type == 'checkbox' %}
+                            {% if response[question.id] is iterable and response[question.id] is not string %}
+                                <ul class="options-display">
+                                {% for option in response[question.id] %}
+                                     <li class="option-item">{{ option }}</li>
+                                {% endfor %}
+                                </ul>
+                            {% else %}
+                                <span>{{ response[question.id] }}</span>
+                            {% endif %}
+                        {% else %}
+                            <span>No answer provided.</span>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>Form or response data is missing.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

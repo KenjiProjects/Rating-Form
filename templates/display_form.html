@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ form.name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        #form-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .question-item {
+            margin-bottom: 20px;
+        }
+        .question-label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .text-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+            margin-bottom: 10px;
+        }
+        .textarea-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+            margin-bottom: 10px;
+            resize: vertical;
+        }
+        .radio-group, .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 10px;
+        }
+        .radio-option, .checkbox-option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        .radio-option input, .checkbox-option input {
+            margin-right: 10px;
+        }
+        #submit-button {
+            display: block;
+            width: 200px;
+            margin: 20px auto;
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #submit-button:hover {
+            background-color: #0056b3;
+        }
+        #message-container {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+            display: none; /* Initially hidden */
+        }
+        #message-container.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        #message-container.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="form-container">
+        <h1>{{ form.name }}</h1>
+        <form method="POST" action="/submit_form/{{ form.id }}" id="form-submit">
+            {% for question in form.questions %}
+                <div class="question-item">
+                    <label class="question-label">{{ question.label }}</label>
+                    {% if question.type == 'text' %}
+                        <input type="text" name="{{ question.id }}" class="text-input" required>
+                    {% elif question.type == 'textarea' %}
+                        <textarea name="{{ question.id }}" class="textarea-input" rows="4" required></textarea>
+                    {% elif question.type == 'radio' %}
+                        <div class="radio-group">
+                            {% for option in question.options %}
+                                <div class="radio-option">
+                                    <input type="radio" name="{{ question.id }}" value="{{ option }}" required>
+                                    <span>{{ option }}</span>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% elif question.type == 'checkbox' %}
+                        <div class="checkbox-group">
+                            {% for option in question.options %}
+                                <div class="checkbox-option">
+                                    <input type="checkbox" name="{{ question.id }}" value="{{ option }}">
+                                    <span>{{ option }}</span>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <button type="submit" id="submit-button">Submit</button>
+        </form>
+        <div id="message-container"></div>
+    </div>
+
+    <script>
+        const formElement = document.getElementById('form-submit');
+        const messageContainer = document.getElementById('message-container');
+
+        formElement.addEventListener('submit', (event) => {
+            event.preventDefault(); // Prevent the default form submission
+
+            const formData = new FormData(formElement);
+            const data = {};
+            formData.forEach((value, key) => {
+                if (data[key]) {
+                    if (!Array.isArray(data[key])) {
+                        data[key] = [data[key]];
+                    }
+                    data[key].push(value);
+                } else {
+                    data[key] = value;
+                }
+            });
+
+            fetch(`/submit_form/${form.id}`, {  // Use the form ID in the URL
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded', // Explicitly set content type
+                },
+                body: new URLSearchParams(data).toString(), // Convert to URL-encoded string
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(\`HTTP error! status: \${response.status}, text: \${await response.text()}\`);
+                }
+                return response.text();
+            })
+            .then(message => {
+                alert('Form submitted successfully!'); //changed
+                formElement.reset();
+
+            })
+            .catch(error => {
+                console.error("Fetch error:", error);
+                messageContainer.textContent = 'An error occurred while submitting the form. Please try again.';
+                messageContainer.className = 'error';
+                messageContainer.style.display = 'block';
+            });
+        });
+    </script>
+</body>
+</html>
