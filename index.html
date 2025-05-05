@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>i-TARAM Feedback</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="pre.css"/>
+</head>
+<body>
+  <main>
+    <div id="page1" class="page">
+      <section class="android-head">
+        <img src="logo.png" alt="" srcset="" width="96px">
+        <h1 class="studioDisplay">i-TARAM</h1>
+        <h1>Your Feedback Matters</h1>
+        <p>Help us improve by giving your honest thoughts. This won’t take long, promise!</p>
+      </section>
+      <section class="section">
+        <button onclick="goToPage('page2')">Proceed</button>
+        <p>Are you an admin? View summary <a href="admin.html">here</a></p>
+      </section>
+    </div>
+  
+    <div id="page2" class="page hidden">
+      <section class="android-head">
+        <h1>Data Privacy Consent</h1>
+        <p>We value your privacy. We process data only to improve our service and nothing else.</p>
+      </section>
+  
+      <section class="android-cards">
+        <h4>Lorem ipsum</h4>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam laudantium repellendus quia doloribus minima? Vitae culpa itaque eaque aliquam molestias? Fuga tempora consectetur inventore distinctio tenetur eum nesciunt architecto fugit?</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde deleniti rerum, atque cumque enim expedita, eius eum laudantium, architecto itaque minima earum quia quam blanditiis? Maiores excepturi possimus quisquam aliquam.</p>
+      </section>
+  
+      <section class="section">
+        <button onclick="goToPage('page3')">I Agree</button>
+      </section>
+    </div>
+  
+    <div id="page3" class="page hidden">
+      <section class="android-head">
+        <h1>Let’s get to know you</h1>
+      </section>
+      <section class="section">
+        <form onsubmit="event.preventDefault(); goToPage('page4')">
+          <label for="client-name">Client Name:</label>
+          <input type="text" id="client-name" name="client_name" />
+  
+          <label for="office-name">Office Name:</label>
+          <select id="office-name" name="office_name" required>
+            <option value="">Select Office</option>
+            <option value="office1">iGovernamnce</option>
+            <option value="office2">Sa Mundo Na Wala Ka</option>
+          </select>
+  
+          <label for="service-name">Service Name:</label>
+          <select id="service-name" name="service_name" required>
+            <option value="">Select Service</option>
+            <option value="service1">Web Development</option>
+            <option value="service2">Papers</option>
+          </select>
+  
+          <button type="submit">Next</button>
+        </form>
+      </section>
+    </div>
+
+    <div id="page4" class="page hidden">
+      <section class="android-head">
+        <h1>Rate Our Service</h1>
+        <p>Let us know how your experience was. We really appreciate your honesty.</p>
+      </section>
+      <section class="section">
+        <form onsubmit="event.preventDefault(); goToPage('page5')">
+          
+          <!-- Star Rating -->
+          <div class="question">
+            <h3>Overall, how would you rate your experience?</h3>
+            <div class="star-rating">
+              <input type="radio" id="q1star5" name="q1" value="5"><label for="q1star5">&#9733;</label>
+              <input type="radio" id="q1star4" name="q1" value="4"><label for="q1star4">&#9733;</label>
+              <input type="radio" id="q1star3" name="q1" value="3"><label for="q1star3">&#9733;</label>
+              <input type="radio" id="q1star2" name="q1" value="2"><label for="q1star2">&#9733;</label>
+              <input type="radio" id="q1star1" name="q1" value="1"><label for="q1star1">&#9733;</label>
+            </div>
+          </div>
+
+          <!-- Yes/No Questions -->
+          <div class="question">
+            <h3>Were the staff helpful and accommodating?</h3>
+            <label><input type="radio" name="q2" value="Yes"> Yes</label>
+            <label><input type="radio" name="q2" value="No"> No</label>
+          </div>
+
+          <div class="question">
+            <h3>Did you receive the service you needed?</h3>
+            <label><input type="radio" name="q3" value="Yes"> Yes</label>
+            <label><input type="radio" name="q3" value="No"> No</label>
+          </div>
+
+          <div class="question">
+            <h3>Was the process clearly explained to you?</h3>
+            <label><input type="radio" name="q4" value="Yes"> Yes</label>
+            <label><input type="radio" name="q4" value="No"> No</label>
+          </div>
+
+          <div class="question">
+            <h3>Were the personnel present and available?</h3>
+            <label><input type="radio" name="q5" value="Yes"> Yes</label>
+            <label><input type="radio" name="q5" value="No"> No</label>
+          </div>
+
+          <label for="comments">Other comments and suggestions:</label>
+          <textarea id="comments" name="comments"></textarea>
+
+          <button type="submit">Submit</button>
+        </form>
+      </section>
+    </div>
+
+    <div id="page5" class="page hidden">
+      <section class="android-head">
+        <h1>Thank you!</h1>
+        <p>Your feedback has been submitted. We appreciate your time and honesty!</p>
+      </section>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>i-TARAM Admin Summary</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="pre.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+</head>
+<body>
+  <main>
+    <div class="page">
+      <section class="android-head">
+        <p><a href="index.html">Return</a></p>
+        <h1>Admin Feedback Summary</h1>
+        <p>Overview of all user-submitted feedback data</p>
+      </section>
+
+      <section>
+        <h3>Analytics</h3>
+        <div class="tightSpace">
+          <h1 id="respondentCount">0</h1>
+          <p>Respondents</p>
+        </div>
+
+        <div class="grid5-scroll" id="rating-snapshot"></div>
+        <canvas id="ratingChart" width="400" height="200"></canvas>
+      </section>
+
+      <section class="section">
+        <h3>Ratings Breakdown</h3>
+        <div class="rating-breakdown"></div>
+      </section>
+
+      <section class="section">
+        <h3>Service Count</h3>
+        <canvas id="serviceChart" width="400" height="200"></canvas>
+        <div id="serviceList"></div>
+      </section>
+
+      <section class="section">
+        <button type="button" onclick="clearData()">Delete all data</button>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    function renderRatingsMeters(data) {
+      const container = document.querySelector('.rating-breakdown');
+      container.innerHTML = '';
+
+      // Q1: Star Rating
+      const q1Div = document.createElement('div');
+      q1Div.innerHTML = '<h4>Q1: Overall Experience</h4><div class="meter-group"></div>';
+      const group = q1Div.querySelector('.meter-group');
+      for (let star = 5; star >= 1; star--) {
+        const val = data.q1[star] || 0;
+        const label = document.createElement('label');
+        label.innerHTML = `${star} ★ <meter value="${val}" min="0" max="10"></meter> ${val}`;
+        group.appendChild(label);
+      }
+      container.appendChild(q1Div);
+
+      // Q2–Q5: Yes/No Meters
+      ['q2', 'q3', 'q4', 'q5'].forEach((q, i) => {
+        const qDiv = document.createElement('div');
+        qDiv.innerHTML = `<h4>Q${i + 2}</h4><div class="meter-group"></div>`;
+        const group = qDiv.querySelector('.meter-group');
+        ['Yes', 'No'].forEach(ans => {
+          const val = data[q][ans] || 0;
+          const label = document.createElement('label');
+          label.innerHTML = `${ans} <meter value="${val}" min="0" max="10"></meter> ${val}`;
+          group.appendChild(label);
+        });
+        container.appendChild(qDiv);
+      });
+    }
+
+    function renderSnapshot(avgRatings) {
+      const snapshot = document.getElementById('rating-snapshot');
+      snapshot.innerHTML = avgRatings.map((val, i) =>
+        `<div class="tightSpace"><h2>${val}</h2><p>Q${i + 1}</p></div>`
+      ).join('');
+    }
+
+    function loadSummary() {
+      const data = JSON.parse(localStorage.getItem('feedback_all')) || [];
+      document.getElementById('respondentCount').innerText = data.length;
+
+      const services = {};
+      const ratings = { q1: {}, q2: {}, q3: {}, q4: {}, q5: {} };
+
+      data.forEach(entry => {
+        if (!services[entry.serviceName]) services[entry.serviceName] = 0;
+        services[entry.serviceName]++;
+
+        if (entry.q1 != null) {
+          ratings.q1[entry.q1] = (ratings.q1[entry.q1] || 0) + 1;
+        }
+
+        ['q2', 'q3', 'q4', 'q5'].forEach(q => {
+          const val = entry[q];
+          if (val) {
+            ratings[q][val] = (ratings[q][val] || 0) + 1;
+          }
+        });
+      });
+
+      const avgQ1 = (() => {
+        let sum = 0, total = 0;
+        for (let star = 1; star <= 5; star++) {
+          const count = ratings.q1[star] || 0;
+          sum += star * count;
+          total += count;
+        }
+        return total ? (sum / total).toFixed(2) : '0.00';
+      })();
+
+      renderSnapshot([avgQ1]);
+      renderRatingsMeters(ratings);
+
+      new Chart(document.getElementById('ratingChart'), {
+        type: 'bar',
+        data: {
+          labels: ['Q1 (Stars)'],
+          datasets: [{
+            label: 'Average Rating',
+            data: [avgQ1],
+            backgroundColor: 'rgba(255, 99, 132, 0.6)',
+          }]
+        },
+        options: {
+          scales: { y: { beginAtZero: true, max: 5 } },
+          responsive: true
+        }
+      });
+
+      new Chart(document.getElementById('serviceChart'), {
+        type: 'bar',
+        data: {
+          labels: Object.keys(services),
+          datasets: [{
+            label: 'Services Availed',
+            data: Object.values(services),
+            backgroundColor: 'rgba(54, 162, 235, 0.6)',
+          }]
+        },
+        options: { responsive: true }
+      });
+
+      const serviceList = document.getElementById('serviceList');
+      serviceList.innerHTML = Object.entries(services).map(([name, count]) =>
+        `<p>${name}: ${count}</p>`
+      ).join('');
+    }
+
+    function clearData() {
+      if (confirm('Are you sure you want to delete all feedback data?')) {
+        localStorage.removeItem('feedback_all');
+        location.reload();
+      }
+    }
+
+    window.onload = loadSummary;
+  </script>
+</body>
+</html>

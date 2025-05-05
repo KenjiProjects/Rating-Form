@@ -1,0 +1,335 @@
+/* Base Styles */
+html {
+  font-family: -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
+  color: #353535;
+  background-color: #f2f2f7;
+}
+
+::selection { background-color: #0000ff80; color: #000; border-radius: .5rem; }
+
+body main {
+  max-width: 768px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+/* Typography */
+h1, h2, h3, h4 {
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  margin: 0 0 1rem 0;
+}
+
+h1 { font-size: 2.5rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.25rem; }
+h4 { font-size: 1rem; }
+h5 { font-size: .875rem; line-height: 1;}
+
+p { 
+  line-height: 1.5;
+  margin: 0 0 1rem 0;
+}
+
+p, small { font-family: 'Inter'; }
+
+p a {
+  color: #0026ff;
+  text-decoration: none;
+  padding: .175em .5em;
+  background-color: #0026ff20;
+  border-radius: .5rem;
+}
+
+a {
+  color: #0026ff;
+  text-decoration: none;
+}
+
+h1, h2, h3, h4, h5, h6, p, small {
+  display: block;
+  margin: 1rem 0;
+}
+
+/* Layout & Animation */
+.page {
+  min-height: 100vh;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from { 
+    transform: translateX(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fromLeftToRightFadeIn {
+  0% {
+    transform: translateX(8px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+section { padding: 2rem; }
+
+.section {
+  padding: 1.5rem;
+}
+
+.android-head {
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  min-height: 33vh;
+}
+
+.android-cards {
+  background-color: #80808020;
+  margin: 2rem;
+  border-radius: .5rem;
+  border: 1px solid #ccc;
+}
+
+/* Cards */
+.question {
+  background: #ffffff;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+/* Forms */
+input, textarea, select {
+  font-family: inherit;
+  font-size: 1rem;
+  padding: 0.75rem;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 0.75rem;
+  background-color: #ffffff;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 1rem;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateY(0);
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: #0026ff;
+  box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+  outline: none;
+  transform: translateY(-2px);
+}
+
+label {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: #3a3a3c;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23555'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1rem;
+  cursor: pointer;
+}
+
+/* Buttons */
+button {
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0.875rem;
+  border: none;
+  border-radius: 0.875rem;
+  background-color: #0026ff;
+  color: #ffffff;
+  width: 100%;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 38, 255, 0.15);
+}
+
+button:active {
+  transform: translateY(0);
+  background-color: #0062cc;
+}
+
+
+/* Yes/No Questions */
+.question label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+  margin: 0;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.question input[type="radio"] {
+  -webkit-appearance: none;
+  width: 1.375rem;
+  height: 1.375rem;
+  border: 2px solid #d1d1d6;
+  border-radius: 50%;
+  margin: 0;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.question input[type="radio"]:checked {
+  border-width: 0.5rem;
+  border-color: #007AFF;
+  animation: radioCheck 0.2s ease-out;
+}
+
+@keyframes radioCheck {
+  0% { transform: scale(0.8); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+
+/* Star Rating */
+.star-rating {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-start;
+}
+
+.star-rating input {
+  display: none;
+}
+
+.star-rating label {
+  font-size: 2.5rem;
+  color: #00000020;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+section form .question:has(.star-rating input:checked) {
+  border: solid 1px #17c70080;
+  border-left: solid 0.5rem #17c700;
+  background-color: #e3ffdf;
+  transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+section form .question:has(.star-rating input:checked) h3 {
+  color: #1d5115;
+}
+
+.star-rating input:checked ~ label {
+  color: #17c700;
+}
+
+section form .question:has( input:checked) {
+  border: solid 1px #004cff80;
+  transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+  color: #17c700;
+  transform: scale(1.2);
+  filter: brightness(1.2);
+}
+
+/* Admin */
+.grid5-scroll {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1rem;
+  overflow-x: auto;
+}
+
+.tightSpace {
+  margin: 1rem 0;
+
+  > * {
+    margin: 0;
+  }
+}
+
+.rating-breakdown h4 {
+  margin-top: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+.meter-group label {
+  width: 64px;
+}
+
+meter {
+  width: 100%;
+  height: 1rem;
+}
+
+::-webkit-meter-optimum-value {
+  background-color: #0026ff;
+}
+
+.tightSpace h1, .tightSpace h2 {
+  margin: 0;
+}
+
+.rating-breakdown {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1rem;
+  overflow-x: auto;
+}
+
+/* Admin Table */
+#summary-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  background: #ffffff;
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+#summary-table td {
+  padding: 1rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+img {
+  margin-bottom: 1rem;
+}
+
+.studioDisplay {
+  background: linear-gradient(90deg, #00c98d, #0e2ae0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+  font-size: 4rem;
+  font-weight: 900;
+  letter-spacing: -0.08em;
+  font-style: italic;
+}
